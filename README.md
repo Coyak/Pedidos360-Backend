@@ -1,13 +1,13 @@
 # Microservicio de Catálogo - Pedidos360
 
-Microservicio desarrollado en **Java 17** con **Spring Boot** para la gestión del catálogo de productos del sistema Pedidos360, integrado con **OAuth 2.0 / JWT** a través de **Microsoft Entra ID (Azure AD)**.
+Microservicio desarrollado en **Java 17 / 21** con **Spring Boot** para la gestión del catálogo de productos del sistema Pedidos360, integrado con **OAuth 2.0 / JWT** a través de **Microsoft Entra ID (Azure AD)**.
 
 ---
 
 ## 🚀 Requisitos Previos
 
 * **Java**: JDK 17 o superior
-* **Maven**: Incluido mediante Maven Wrapper (`./mvnw` / `mvnw.cmd`)
+* **Maven**: Incluido mediante Maven Wrapper (`./mvnw` / `mvnw.cmd`) o instalación local (`mvn`)
 * **Cuenta / Inquilino de Azure AD**: Para autenticación mediante tokens JWT.
 
 ---
@@ -20,7 +20,7 @@ Asegúrate de tener configurado tu `Tenant ID` de Microsoft Entra ID en `src/mai
 spring.application.name=catalogo
 
 # Configuración de OAuth2 / Resource Server con Microsoft Entra ID (Azure)
-spring.security.oauth2.resourceserver.jwt.issuer-uri=https://login.microsoftonline.com/<TU_TENANT_ID>/v2.0
+spring.security.oauth2.resourceserver.jwt.issuer-uri=https://login.microsoftonline.com/e5372bf0-c5e3-4286-887c-79069f209c1f/v2.0
 ```
 
 ---
@@ -30,13 +30,8 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri=https://login.microsoftonli
 Para iniciar el servidor en entorno local de desarrollo, ejecuta en la raíz del proyecto:
 
 ```bash
-./mvnw spring-boot:run
+mvn spring-boot:run
 ```
-
-> **En Windows (PowerShell / CMD):**
-> ```cmd
-> .\mvnw.cmd spring-boot:run
-> ```
 
 El microservicio estará disponible por defecto en `http://localhost:8080`.
 
@@ -55,7 +50,7 @@ El microservicio estará disponible por defecto en `http://localhost:8080`.
 {
   "status": "OK",
   "message": "Microservicio de Catálogo en ejecución",
-  "version": "1.3.1"
+  "version": "1.3.2"
 }
 ```
 
@@ -90,9 +85,9 @@ El microservicio estará disponible por defecto en `http://localhost:8080`.
 
 ## 🔒 Configuración de Seguridad y CORS
 
-* **CORS Permitidos:** `http://localhost:4200` (Angular) y `http://localhost:5173` (Vite/React).
+* **CORS Permitidos:** Patrón global `*` (con soporte para localhost:5173, localhost:4200 y AWS API Gateway).
 * **Métodos HTTP:** `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`.
-* **Filtro JWT:** Valida criptográficamente los tokens JWT emitidos por Microsoft Entra ID usando las llaves públicas de la plataforma.
+* **Filtro JWT:** Validador flexible de firma criptográfica mediante JWK Set URI (`https://login.microsoftonline.com/e5372bf0-c5e3-4286-887c-79069f209c1f/discovery/v2.0/keys`) para validar audiencia (`aud`) y emisor (`iss`) de Entra ID v1.0/v2.0.
 
 ---
 
@@ -106,3 +101,4 @@ El microservicio estará disponible por defecto en `http://localhost:8080`.
 | **`1.2.0`** | `v1.2.0` | Incorporación de dependencias `spring-boot-starter-security` y `oauth2-resource-server` con configuración de Azure AD en `application.properties`. |
 | **`1.3.0`** | `v1.3.0` | Implementación de `SecurityConfig.java` con filtro JWT de Azure AD, rutas protegidas/públicas y políticas CORS. |
 | **`1.3.1`** | `v1.3.1` | Actualización de documentación en `README.md` y sincronización de versión devuelta por el endpoint de status. |
+| **`1.3.2`** | `v1.3.2` | Fix de bug en `SecurityConfig`: validador flexible de token JWT Entra ID (`aud`/`iss`) evitando HTTP 401 en `/api/status` y soporte preflight `OPTIONS`. |

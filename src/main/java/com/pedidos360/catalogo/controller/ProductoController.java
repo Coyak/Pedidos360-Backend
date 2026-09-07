@@ -20,7 +20,7 @@ public class ProductoController {
         Map<String, String> response = new HashMap<>();
         response.put("status", "OK");
         response.put("message", "Microservicio de Catálogo en ejecución");
-        response.put("version", "1.3.1");
+        response.put("version", "1.3.2");
         return response;
     }
 
