@@ -20,7 +20,7 @@ public class ProductoController {
         Map<String, String> response = new HashMap<>();
         response.put("status", "OK");
         response.put("message", "Microservicio de Catálogo en ejecución");
-        response.put("version", "1.1.1");
+        response.put("version", "1.3.1");
         return response;
     }
 
@@ -28,8 +28,8 @@ public class ProductoController {
     public ResponseEntity<Map<String, String>> crearProducto(@RequestBody(required = false) String producto) {
         Map<String, String> response = new HashMap<>();
 
-        // FIX (Versión 1.1.1):
-        // Se añade validación para evitar NullPointerException cuando 'producto' es nulo o está vacío.
+        // FIX:
+        // Validación para evitar NullPointerException cuando 'producto' es nulo o está vacío.
         if (producto == null || producto.trim().isEmpty()) {
             response.put("status", "ERROR");
             response.put("message", "El nombre del producto es obligatorio y no puede estar vacío");
